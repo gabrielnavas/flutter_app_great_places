@@ -14,4 +14,13 @@ class Place {
     required this.location,
     required this.image,
   });
+
+  static Place init() {
+    return Place(
+      id: '',
+      title: '',
+      location: PlaceLocation(latitude: 0, longitude: 0, address: ''),
+      image: File(''),
+    );
+  }
 }

@@ -1,5 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_app_great_places/models/place.dart';
+import 'package:flutter_app_great_places/models/place_location.dart';
 import 'package:flutter_app_great_places/widgets/image_input.dart';
+import 'package:image_picker/image_picker.dart';
 
 class PlaceFormScreen extends StatefulWidget {
   const PlaceFormScreen({super.key});
@@ -11,13 +16,39 @@ class PlaceFormScreen extends StatefulWidget {
 class _PlaceFormScreenState extends State<PlaceFormScreen> {
   final _titleController = TextEditingController();
 
+  File? _pickedImage;
+
   @override
   void dispose() {
     super.dispose();
     _titleController.dispose();
   }
 
-  void _submitForm() {}
+  void _submitForm() {
+    String message = "";
+
+    if (_titleController.text.isEmpty) {
+      message = "Adicione um título!";
+    } else if (_pickedImage == null) {
+      message = "Adicione um imagem!";
+    }
+
+    if (message.isNotEmpty) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+    }
+
+    Navigator.of(context).pop();
+  }
+
+  void _selectImage(File? pickedImage) {
+    setState(() => _pickedImage = pickedImage);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +73,7 @@ class _PlaceFormScreenState extends State<PlaceFormScreen> {
               autofocus: true,
             ),
           ),
-          const ImageInput(),
+          ImageInput(selectImage: _selectImage),
           const Spacer(),
           TextButton(
             style: TextButton.styleFrom(

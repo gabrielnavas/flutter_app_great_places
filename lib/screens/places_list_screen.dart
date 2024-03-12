@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_great_places/main.dart';
+import 'package:flutter_app_great_places/routes.dart';
 
 class PlacesListScreen extends StatelessWidget {
   const PlacesListScreen({super.key});
