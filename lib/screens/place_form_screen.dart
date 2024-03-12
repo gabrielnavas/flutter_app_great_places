@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app_great_places/models/place.dart';
-import 'package:flutter_app_great_places/models/place_location.dart';
+import 'package:flutter_app_great_places/providers/great_places.dart';
 import 'package:flutter_app_great_places/widgets/image_input.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class PlaceFormScreen extends StatefulWidget {
   const PlaceFormScreen({super.key});
@@ -42,6 +42,11 @@ class _PlaceFormScreenState extends State<PlaceFormScreen> {
         ),
       );
     }
+
+    Provider.of<GreatPlaces>(context, listen: false).addPlaces(
+      _titleController.text,
+      _pickedImage!,
+    );
 
     Navigator.of(context).pop();
   }
