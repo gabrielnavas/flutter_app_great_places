@@ -31,29 +31,48 @@ class PlacesListScreen extends StatelessWidget {
             ),
           ],
         ),
-        body: Consumer<GreatPlaces>(
-          child: const Center(
-            child: Text(
-              'Nenhum lugar cadastrado',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 22,
-                color: Colors.black87,
-              ),
-            ),
-          ),
-          builder: (context, greatPlaces, child) {
-            if (greatPlaces.itemsCount == 0) {
-              return child!;
+        body: FutureBuilder(
+          future: Provider.of<GreatPlaces>(context, listen: false).loadPlaces(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return _renderWaiting();
             }
 
-            return ListView.builder(
-              itemCount: greatPlaces.itemsCount,
-              itemBuilder: (context, index) {
-                return PlaceItem(place: greatPlaces.items[index]);
-              },
-            );
+            return _renderListViewGreatPlaces();
           },
         ));
+  }
+
+  Consumer<GreatPlaces> _renderListViewGreatPlaces() {
+    return Consumer<GreatPlaces>(
+      child: const Center(
+        child: Text(
+          'Nenhum lugar cadastrado',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
+            color: Colors.black87,
+          ),
+        ),
+      ),
+      builder: (context, greatPlaces, child) {
+        if (greatPlaces.itemsCount == 0) {
+          return child!;
+        }
+
+        return ListView.builder(
+          itemCount: greatPlaces.itemsCount,
+          itemBuilder: (context, index) {
+            return PlaceItem(place: greatPlaces.items[index]);
+          },
+        );
+      },
+    );
+  }
+
+  Center _renderWaiting() {
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
   }
 }

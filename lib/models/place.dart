@@ -15,6 +15,19 @@ class Place {
     required this.image,
   });
 
+  static Place withoutLocation(
+    String id,
+    String title,
+    File image,
+  ) {
+    return Place(
+      id: id,
+      title: title,
+      image: image,
+      location: PlaceLocation(latitude: 0, longitude: 0, address: ''),
+    );
+  }
+
   static Place init() {
     return Place(
       id: '',
