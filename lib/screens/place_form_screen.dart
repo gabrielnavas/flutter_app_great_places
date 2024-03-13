@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_great_places/models/place.dart';
 import 'package:flutter_app_great_places/providers/great_places.dart';
 import 'package:flutter_app_great_places/widgets/image_input.dart';
+import 'package:flutter_app_great_places/widgets/location_input.dart';
 import 'package:provider/provider.dart';
 
 class PlaceFormScreen extends StatefulWidget {
@@ -79,6 +80,10 @@ class _PlaceFormScreenState extends State<PlaceFormScreen> {
             ),
           ),
           ImageInput(selectImage: _selectImage),
+          const SizedBox(
+            height: 20,
+          ),
+          const LocationInput(),
           const Spacer(),
           TextButton(
             style: TextButton.styleFrom(
