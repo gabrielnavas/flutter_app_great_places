@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_great_places/models/place_location.dart';
+import 'package:flutter_app_great_places/models/place_location_map.dart';
 import 'package:location/location.dart';
 
 class LocationInput extends StatefulWidget {
@@ -11,10 +13,32 @@ class LocationInput extends StatefulWidget {
 class _LocationInputState extends State<LocationInput> {
   String? _previewImageUrl;
 
+  _LocationInputState() {
+    _getCurrentUserLocation().catchError((err) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Não foi possível carregar sua localização atual.'),
+          duration: Duration(seconds: 3),
+        ),
+      );
+    });
+  }
+
   Future<void> _getCurrentUserLocation() async {
     final LocationData location = await Location().getLocation();
-    print(location.latitude);
-    print(location.longitude);
+    if (location.latitude == null || location.longitude == null) {
+      return;
+    }
+    final PlaceLocationMap placeLocationMap = PlaceLocationMap(
+      placeLocation: PlaceLocation(
+          latitude: location.latitude!,
+          longitude: location.longitude!,
+          address: ''),
+    );
+
+    setState(() {
+      _previewImageUrl = placeLocationMap.generateLocationPreviewImage();
+    });
   }
 
   @override
@@ -29,7 +53,7 @@ class _LocationInputState extends State<LocationInput> {
             border: Border.all(width: 1, color: Colors.red),
           ),
           child: _previewImageUrl == null
-              ? const Text('Não informado')
+              ? const CircularProgressIndicator()
               : Image.network(
                   _previewImageUrl!,
                   fit: BoxFit.cover,
@@ -40,7 +64,7 @@ class _LocationInputState extends State<LocationInput> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             IconButton(
-              onPressed: () {},
+              onPressed: _getCurrentUserLocation,
               icon: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -51,9 +75,7 @@ class _LocationInputState extends State<LocationInput> {
               ),
             ),
             IconButton(
-              onPressed: () {
-                _getCurrentUserLocation();
-              },
+              onPressed: () {},
               icon: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
