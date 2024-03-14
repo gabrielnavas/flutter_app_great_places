@@ -83,7 +83,10 @@ class _PlaceFormScreenState extends State<PlaceFormScreen> {
           const SizedBox(
             height: 20,
           ),
-          const LocationInput(),
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: LocationInput(),
+          ),
           const Spacer(),
           TextButton(
             style: TextButton.styleFrom(
