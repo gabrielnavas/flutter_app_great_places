@@ -3,11 +3,11 @@ import 'package:flutter_app_great_places/models/place_location.dart';
 
 class PlaceLocationMap {
   final PlaceLocation placeLocation;
-  final int zoom;
+  final double zoom;
   final int sizeX;
   final int sizeY;
 
-  PlaceLocationMap({
+  const PlaceLocationMap({
     required this.placeLocation,
     this.zoom = 13,
     this.sizeX = 600,

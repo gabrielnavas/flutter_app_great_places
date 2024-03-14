@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_great_places/models/place_location.dart';
 import 'package:flutter_app_great_places/models/place_location_map.dart';
+import 'package:flutter_app_great_places/screens/map_screen.dart';
 import 'package:location/location.dart';
 
 class LocationInput extends StatefulWidget {
@@ -41,6 +42,26 @@ class _LocationInputState extends State<LocationInput> {
     });
   }
 
+  Future<void> _selectOnMap() async {
+    final PlaceLocation? selectedLocation =
+        await Navigator.of(context).push<PlaceLocation>(
+      MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (ctx) => const MapScreen(),
+      ),
+    );
+
+    if (selectedLocation == null) {
+      return;
+    } else {
+      setState(() {
+        final PlaceLocationMap placeLocationMap =
+            PlaceLocationMap(placeLocation: selectedLocation);
+        _previewImageUrl = placeLocationMap.generateLocationPreviewImage();
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -75,7 +96,7 @@ class _LocationInputState extends State<LocationInput> {
               ),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: _selectOnMap,
               icon: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
