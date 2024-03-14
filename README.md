@@ -1,16 +1,12 @@
-# flutter_app_great_places
+# Greate Places Flutter App
 
-A new Flutter project.
+## Before all
+- Take a photos and get real location.
+- using Google Maps API.
+- **[WARNING]** Add Google Maps Key in [google_api.dart](lib/constants/google_api.dart).
+- **[WARNING]** Add Google Maps Key inside [AndroidManifest.xml](android/app/src/main/AndroidManifest.xml) located in line 10 <YOUR KEY HERE>.
 
-## Getting Started
+# Preview
+- Forked from [Shop Flutter App](https://github.com/gabrielnavas/shop_flutter_auth_firebase_app) and enhanced with animations.
+- Utilizes a state manager and enables data persistence on Firebase.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
