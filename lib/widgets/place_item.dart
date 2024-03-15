@@ -11,26 +11,33 @@ class PlaceItem extends StatelessWidget {
     return ListTile(
       onTap: () {},
       leading: CircleAvatar(backgroundImage: FileImage(place.image)),
-      title: Text(place.title),
+      title: Text(
+        place.title,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
+      ),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            '${place.location.latitude},',
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Text(
-            place.location.longitude.toString(),
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
+          const SizedBox(
+            height: 5,
           ),
           Text(
             place.location.address,
             style: const TextStyle(
               fontWeight: FontWeight.w400,
+              fontSize: 13,
+            ),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Text(
+            '${place.location.latitude}, ${place.location.longitude}',
+            style: const TextStyle(
+              fontWeight: FontWeight.w500,
+              fontSize: 12.5,
             ),
           ),
         ],
