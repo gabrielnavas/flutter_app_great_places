@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_great_places/models/place_location.dart';
 import 'package:flutter_app_great_places/models/place_location_map.dart';
 import 'package:flutter_app_great_places/screens/map_screen.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
 class LocationInput extends StatefulWidget {
@@ -13,6 +14,7 @@ class LocationInput extends StatefulWidget {
 
 class _LocationInputState extends State<LocationInput> {
   String? _previewImageUrl;
+  LatLng? _latLngSelected;
 
   _LocationInputState() {
     _getCurrentUserLocation().catchError((err) {
@@ -43,20 +45,35 @@ class _LocationInputState extends State<LocationInput> {
   }
 
   Future<void> _selectOnMap() async {
-    final PlaceLocation? selectedLocation =
-        await Navigator.of(context).push<PlaceLocation>(
+    Widget builder = _latLngSelected != null
+        ? MapScreen(
+            inititalPlacelocationMap: PlaceLocationMap(
+              placeLocation: PlaceLocation.withoutAddress(
+                _latLngSelected!.latitude,
+                _latLngSelected!.longitude,
+              ),
+            ),
+          )
+        : MapScreen();
+
+    final LatLng? latLngSelected = await Navigator.of(context).push<LatLng>(
       MaterialPageRoute(
         fullscreenDialog: true,
-        builder: (ctx) => const MapScreen(),
+        builder: (ctx) => builder,
       ),
     );
 
-    if (selectedLocation == null) {
+    if (latLngSelected == null) {
       return;
     } else {
       setState(() {
-        final PlaceLocationMap placeLocationMap =
-            PlaceLocationMap(placeLocation: selectedLocation);
+        _latLngSelected = latLngSelected;
+        final PlaceLocationMap placeLocationMap = PlaceLocationMap(
+          placeLocation: PlaceLocation.withoutAddress(
+            latLngSelected.latitude,
+            latLngSelected.longitude,
+          ),
+        );
         _previewImageUrl = placeLocationMap.generateLocationPreviewImage();
       });
     }

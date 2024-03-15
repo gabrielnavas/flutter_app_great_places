@@ -5,6 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapScreen extends StatefulWidget {
   final PlaceLocationMap inititalPlacelocationMap;
+  bool isReadonly = false;
 
   /*  = PlaceLocation(
       latitude: 37.422131,
@@ -12,7 +13,7 @@ class MapScreen extends StatefulWidget {
       address: '',
   ) */
 
-  const MapScreen({
+  MapScreen({
     this.inititalPlacelocationMap = const PlaceLocationMap(
       placeLocation: PlaceLocation(
         latitude: 37.422131,
@@ -20,6 +21,7 @@ class MapScreen extends StatefulWidget {
         address: '',
       ),
     ),
+    this.isReadonly = false,
     super.key,
   });
 
@@ -28,11 +30,32 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
+  LatLng? _latLng;
+  Set<Marker> positions = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _selectPosition(
+      LatLng(
+        widget.inititalPlacelocationMap.placeLocation.latitude,
+        widget.inititalPlacelocationMap.placeLocation.longitude,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Selecione a posição'),
+        actions: [
+          if (!widget.isReadonly)
+            IconButton(
+              onPressed: _finishPosition,
+              icon: const Icon(Icons.check),
+            )
+        ],
       ),
       body: GoogleMap(
         initialCameraPosition: CameraPosition(
@@ -42,14 +65,28 @@ class _MapScreenState extends State<MapScreen> {
           ),
           zoom: widget.inititalPlacelocationMap.zoom,
         ),
-        onTap: (argument) {
-          final PlaceLocation placeLocation = PlaceLocation(
-              latitude: argument.latitude,
-              longitude: argument.longitude,
-              address: '');
-          Navigator.of(context).pop(placeLocation);
-        },
+        onTap: _selectPosition,
+        markers: positions,
       ),
     );
+  }
+
+  void _selectPosition(LatLng latLng) {
+    setState(() {
+      _latLng = latLng;
+    });
+
+    setState(() {
+      positions = {
+        Marker(
+          markerId: const MarkerId('p1'),
+          position: latLng,
+        ),
+      };
+    });
+  }
+
+  void _finishPosition() {
+    Navigator.of(context).pop(_latLng);
   }
 }
