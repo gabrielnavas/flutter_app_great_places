@@ -14,8 +14,8 @@ class PlacesSqlite {
             title TEXT, 
             image TEXT,
             location_address TEXT,
-            location_lat TEXT,
-            location_lng TEXT
+            location_lat REAL,
+            location_lng REAL
           );
           """);
     }, version: 1);
