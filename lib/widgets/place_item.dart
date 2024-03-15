@@ -12,8 +12,29 @@ class PlaceItem extends StatelessWidget {
       onTap: () {},
       leading: CircleAvatar(backgroundImage: FileImage(place.image)),
       title: Text(place.title),
-      subtitle: Text(
-          '${place.location.latitude} - ${place.location.longitude}, ${place.location.address}'),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            '${place.location.latitude},',
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            place.location.longitude.toString(),
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            place.location.address,
+            style: const TextStyle(
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
