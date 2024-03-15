@@ -24,7 +24,7 @@ class Place {
       id: id,
       title: title,
       image: image,
-      location: PlaceLocation(latitude: 0, longitude: 0, address: ''),
+      location: const PlaceLocation(latitude: 0, longitude: 0, address: ''),
     );
   }
 
