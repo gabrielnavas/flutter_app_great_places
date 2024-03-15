@@ -19,28 +19,31 @@ class _LocationInputState extends State<LocationInput> {
   LatLng? _latLngSelected;
 
   _LocationInputState() {
-    _getCurrentUserLocation().catchError((err) {
-      SnackCustom.snack(
-          context: context,
-          message: 'Não foi possível carregar sua localização atual.');
-    });
+    _getCurrentUserLocation();
   }
 
-  Future<void> _getCurrentUserLocation() async {
-    final LocationData location = await Location().getLocation();
-    if (location.latitude == null || location.longitude == null) {
-      return;
-    }
-    final PlaceLocationMap placeLocationMap = PlaceLocationMap(
-      placeLocation: PlaceLocation(
-        latitude: location.latitude!,
-        longitude: location.longitude!,
-      ),
-    );
+  void _getCurrentUserLocation() {
+    try {
+      Location().getLocation().then((location) {
+        if (location.latitude == null || location.longitude == null) {
+          return;
+        }
+        final PlaceLocationMap placeLocationMap = PlaceLocationMap(
+          placeLocation: PlaceLocation(
+            latitude: location.latitude!,
+            longitude: location.longitude!,
+          ),
+        );
 
-    setState(() {
-      _previewImageUrl = placeLocationMap.generateLocationPreviewImage();
-    });
+        setState(() {
+          _previewImageUrl = placeLocationMap.generateLocationPreviewImage();
+        });
+      });
+    } catch (ex) {
+      SnackCustom.snack(
+          context: context,
+          message: 'Não é possível obter a localização sem permissão!');
+    }
   }
 
   Future<void> _selectOnMap() async {
