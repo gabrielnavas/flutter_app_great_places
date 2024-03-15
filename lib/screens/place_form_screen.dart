@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app_great_places/messages/snackbar.dart';
 import 'package:flutter_app_great_places/providers/great_places.dart';
 import 'package:flutter_app_great_places/widgets/image_input.dart';
 import 'package:flutter_app_great_places/widgets/location_input.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 class PlaceFormScreen extends StatefulWidget {
@@ -17,6 +19,7 @@ class _PlaceFormScreenState extends State<PlaceFormScreen> {
   final _titleController = TextEditingController();
 
   File? _pickedImage;
+  LatLng? _latLng;
 
   @override
   void dispose() {
@@ -25,34 +28,57 @@ class _PlaceFormScreenState extends State<PlaceFormScreen> {
   }
 
   void _submitForm() {
+    if (!validForm(context)) {
+      return;
+    }
+
+    Provider.of<GreatPlaces>(context, listen: false)
+        .addPlaces(_titleController.text, _pickedImage!, _latLng!)
+        .then((added) {
+      if (!added) {
+        SnackCustom.snack(
+          context: context,
+          message: 'Houve um problema. Tente adicionar a posição mais tarde.',
+          secondsDuration: 4,
+        );
+      } else {
+        Navigator.of(context).pop();
+      }
+    }).catchError((onError) {
+      SnackCustom.snack(
+        context: context,
+        message:
+            'Houve um problema inesperado. Tente adicionar a posição mais tarde.',
+        secondsDuration: 4,
+      );
+    });
+  }
+
+  bool validForm(BuildContext context) {
     String message = "";
 
     if (_titleController.text.isEmpty) {
       message = "Adicione um título!";
     } else if (_pickedImage == null) {
       message = "Adicione um imagem!";
+    } else if (_latLng == null) {
+      message = "Adicione um localização!";
     }
 
     if (message.isNotEmpty) {
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          duration: const Duration(seconds: 2),
-        ),
-      );
+      SnackCustom.snack(context: context, message: message, secondsDuration: 2);
+      return false;
     }
 
-    Provider.of<GreatPlaces>(context, listen: false).addPlaces(
-      _titleController.text,
-      _pickedImage!,
-    );
-
-    Navigator.of(context).pop();
+    return true;
   }
 
   void _selectImage(File? pickedImage) {
     setState(() => _pickedImage = pickedImage);
+  }
+
+  void _selectPosition(LatLng? latLng) {
+    setState(() => _latLng = latLng);
   }
 
   @override
@@ -82,9 +108,9 @@ class _PlaceFormScreenState extends State<PlaceFormScreen> {
           const SizedBox(
             height: 20,
           ),
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: LocationInput(),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: LocationInput(selectPosition: _selectPosition),
           ),
           const Spacer(),
           TextButton(

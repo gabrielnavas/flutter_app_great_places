@@ -7,18 +7,11 @@ class MapScreen extends StatefulWidget {
   final PlaceLocationMap inititalPlacelocationMap;
   bool isReadonly = false;
 
-  /*  = PlaceLocation(
-      latitude: 37.422131,
-      longitude: -122.084801,
-      address: '',
-  ) */
-
   MapScreen({
     this.inititalPlacelocationMap = const PlaceLocationMap(
       placeLocation: PlaceLocation(
         latitude: 37.422131,
         longitude: -122.084801,
-        address: '',
       ),
     ),
     this.isReadonly = false,

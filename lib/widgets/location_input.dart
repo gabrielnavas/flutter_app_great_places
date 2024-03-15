@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_great_places/messages/snackbar.dart';
 import 'package:flutter_app_great_places/models/place_location.dart';
 import 'package:flutter_app_great_places/models/place_location_map.dart';
 import 'package:flutter_app_great_places/screens/map_screen.dart';
@@ -6,7 +7,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
 class LocationInput extends StatefulWidget {
-  const LocationInput({super.key});
+  final void Function(LatLng? latLng) selectPosition;
+  const LocationInput({required this.selectPosition, super.key});
 
   @override
   State<LocationInput> createState() => _LocationInputState();
@@ -18,12 +20,9 @@ class _LocationInputState extends State<LocationInput> {
 
   _LocationInputState() {
     _getCurrentUserLocation().catchError((err) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Não foi possível carregar sua localização atual.'),
-          duration: Duration(seconds: 3),
-        ),
-      );
+      SnackCustom.snack(
+          context: context,
+          message: 'Não foi possível carregar sua localização atual.');
     });
   }
 
@@ -34,9 +33,9 @@ class _LocationInputState extends State<LocationInput> {
     }
     final PlaceLocationMap placeLocationMap = PlaceLocationMap(
       placeLocation: PlaceLocation(
-          latitude: location.latitude!,
-          longitude: location.longitude!,
-          address: ''),
+        latitude: location.latitude!,
+        longitude: location.longitude!,
+      ),
     );
 
     setState(() {
@@ -48,9 +47,9 @@ class _LocationInputState extends State<LocationInput> {
     Widget builder = _latLngSelected != null
         ? MapScreen(
             inititalPlacelocationMap: PlaceLocationMap(
-              placeLocation: PlaceLocation.withoutAddress(
-                _latLngSelected!.latitude,
-                _latLngSelected!.longitude,
+              placeLocation: PlaceLocation(
+                latitude: _latLngSelected!.latitude,
+                longitude: _latLngSelected!.longitude,
               ),
             ),
           )
@@ -66,12 +65,13 @@ class _LocationInputState extends State<LocationInput> {
     if (latLngSelected == null) {
       return;
     } else {
+      widget.selectPosition(latLngSelected);
       setState(() {
         _latLngSelected = latLngSelected;
         final PlaceLocationMap placeLocationMap = PlaceLocationMap(
-          placeLocation: PlaceLocation.withoutAddress(
-            latLngSelected.latitude,
-            latLngSelected.longitude,
+          placeLocation: PlaceLocation(
+            latitude: latLngSelected.latitude,
+            longitude: latLngSelected.longitude,
           ),
         );
         _previewImageUrl = placeLocationMap.generateLocationPreviewImage();

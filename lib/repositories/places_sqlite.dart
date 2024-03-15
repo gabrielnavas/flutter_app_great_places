@@ -12,7 +12,10 @@ class PlacesSqlite {
           CREATE TABLE IF NOT EXISTS $_tableName (
             id TEXT PRIMARY KEY, 
             title TEXT, 
-            image TEXT
+            image TEXT,
+            location_address TEXT,
+            location_lat TEXT,
+            location_lng TEXT
           );
           """);
     }, version: 1);

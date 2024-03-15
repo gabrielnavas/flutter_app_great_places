@@ -23,9 +23,7 @@ class _ImageInputState extends State<ImageInput> {
       maxWidth: 600,
     ) as XFile;
 
-    setState(() {
-      _storedImage = File(imageFile.path);
-    });
+    setState(() => _storedImage = File(imageFile.path));
 
     File savedImage = await _saveImageOnDispositive();
     widget.selectImage(savedImage);

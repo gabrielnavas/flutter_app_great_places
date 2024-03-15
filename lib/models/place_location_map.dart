@@ -15,6 +15,6 @@ class PlaceLocationMap {
   });
 
   String generateLocationPreviewImage() {
-    return """https://maps.googleapis.com/maps/api/staticmap?center=${placeLocation.latitude},${placeLocation.longitude}&zoom=$zoom&size=${sizeX}x${sizeY}&maptype=roadmap&markers=color:red%7Clabel:A%7C${placeLocation.latitude},${placeLocation.longitude}&key=$googleApiKey""";
+    return """https://maps.googleapis.com/maps/api/staticmap?center=${placeLocation.latitude},${placeLocation.longitude}&zoom=$zoom&size=${sizeX}x$sizeY&maptype=roadmap&markers=color:red%7Clabel:A%7C${placeLocation.latitude},${placeLocation.longitude}&key=$googleApiKey""";
   }
 }
