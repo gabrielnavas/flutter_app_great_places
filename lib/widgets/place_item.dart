@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_great_places/models/place.dart';
+import 'package:flutter_app_great_places/routes.dart';
 
 class PlaceItem extends StatelessWidget {
   final Place place;
@@ -9,7 +10,8 @@ class PlaceItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () {},
+      onTap: () => Navigator.of(context)
+          .pushNamed(Routes.placeDetails, arguments: place),
       leading: CircleAvatar(backgroundImage: FileImage(place.image)),
       title: Text(
         place.title,
