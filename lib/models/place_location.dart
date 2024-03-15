@@ -8,4 +8,15 @@ class PlaceLocation {
     required this.longitude,
     required this.address,
   });
+
+  static PlaceLocation withoutAddress(
+    double latitude,
+    double longitude,
+  ) {
+    return PlaceLocation(
+      latitude: latitude,
+      longitude: longitude,
+      address: '',
+    );
+  }
 }
