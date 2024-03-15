@@ -51,9 +51,12 @@ class _MapScreenState extends State<MapScreen> {
         title: const Text('Selecione a posição'),
         actions: [
           if (!widget.isReadonly)
-            IconButton(
-              onPressed: _finishPosition,
-              icon: const Icon(Icons.check),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 8),
+              child: IconButton(
+                onPressed: _finishPosition,
+                icon: const Icon(Icons.check),
+              ),
             )
         ],
       ),
